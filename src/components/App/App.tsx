@@ -6,14 +6,35 @@ import MovieGrid from "../MovieGrid/MovieGrid";
 import type { Movie } from "../../types/movie";
 import { useState } from "react";
 import MovieModal from "../MovieModal/MovieModal";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMovie(null);
+  };
   const [movies, setMovies] = useState<Movie[]>([]);
 
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+
+  const handleSelectMovie = (movieId: number) => {
+    const result = movies.find((movie) => movie.id === movieId);
+    if (result) {
+      setSelectedMovie(result);
+    }
+    openModal();
+  };
+
   const handleSearch = async (query: string) => {
+    setMovies([]);
+    setIsLoad(true);
+    setIsError(false);
     try {
       const data = await fetchMovies({ query });
       if (data.length == 0) {
@@ -22,6 +43,9 @@ export default function App() {
       setMovies([...data]);
     } catch (error) {
       toast.error(`${error}`);
+      setIsError(true);
+    } finally {
+      setIsLoad(false);
     }
   };
 
@@ -29,8 +53,12 @@ export default function App() {
     <div className={css.app}>
       <Toaster position="top-center" />
       <SearchBar onSubmit={handleSearch} />
-      {movies.length > 0 && <MovieGrid movies={movies} onSelect={openModal} />}
-      {isModalOpen && <MovieModal movie={movies[0]} onClose={closeModal} />}
+      {movies.length > 0 && (
+        <MovieGrid movies={movies} onSelect={handleSelectMovie} />
+      )}
+      {isLoad && <Loader />}
+      {isError && <ErrorMessage />}
+      {isModalOpen && <MovieModal movie={selectedMovie} onClose={closeModal} />}
     </div>
   );
 }

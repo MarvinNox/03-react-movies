@@ -5,8 +5,7 @@
   margin: 0 auto;
   gap: 12px;
   list-style: none;
-  padding: 0;
-  padding-bottom: 20px;
+  padding: 20px 0;
 }
 
 .card {

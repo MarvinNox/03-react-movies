@@ -4,7 +4,7 @@ import css from "./MovieModal.module.css";
 import { createPortal } from "react-dom";
 
 interface MovieModalProps {
-  movie: Movie;
+  movie: Movie | null;
   onClose: () => void;
 }
 
@@ -46,21 +46,21 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
         </button>
         <img
           src={
-            movie.backdrop_path !== null
-              ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`
+            movie?.backdrop_path !== null
+              ? `https://image.tmdb.org/t/p/original${movie?.backdrop_path}`
               : "https://armyinform.com.ua/wp-content/uploads/2024/05/45df04fdc242147063b1a9e213f42900.jpeg"
           }
-          alt={movie.title}
+          alt={movie?.title}
           className={css.image}
         />
         <div className={css.content}>
-          <h2>{movie.title}</h2>
-          <p>{movie.overview}</p>
+          <h2>{movie?.title}</h2>
+          <p>{movie?.overview}</p>
           <p>
-            <strong>Release Date:</strong> {movie.release_date}
+            <strong>Release Date:</strong> {movie?.release_date}
           </p>
           <p>
-            <strong>Rating:</strong> {movie.vote_average}/10
+            <strong>Rating:</strong> {movie?.vote_average.toFixed(2)}/10
           </p>
         </div>
       </div>

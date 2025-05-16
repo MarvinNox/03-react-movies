@@ -19,7 +19,7 @@ export async function fetchMovies({
   page = 1,
 }: FetchMoviesPros): Promise<Movie[]> {
   const responce = await axios.get<MoviesHttpResponse>(
-    `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=true&language=en-US&page=${page}`,
+    `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}`,
     {
       headers: {
         Authorization: `Bearer ${API_KEY}`,
