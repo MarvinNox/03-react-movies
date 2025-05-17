@@ -17,8 +17,8 @@ interface MoviesHttpResponse {
 export async function fetchMovies({
   query,
   page = 1,
-}: FetchMoviesPros): Promise<Movie[]> {
-  const responce = await axios.get<MoviesHttpResponse>(
+}: FetchMoviesPros): Promise<MoviesHttpResponse> {
+  const response = await axios.get<MoviesHttpResponse>(
     `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}`,
     {
       headers: {
@@ -27,5 +27,5 @@ export async function fetchMovies({
       },
     }
   );
-  return responce.data.results;
+  return response.data;
 }
