@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import type { Movie } from "../../types/movie";
 import css from "./MovieModal.module.css";
 import { createPortal } from "react-dom";
@@ -11,11 +11,14 @@ const placeholderImage: string =
   "https://armyinform.com.ua/wp-content/uploads/2024/05/45df04fdc242147063b1a9e213f42900.jpeg";
 
 export default function MovieModal({ movie, onClose }: MovieModalProps) {
-  function handleBackDropClick(evt: React.MouseEvent<HTMLDivElement>) {
-    if (evt.target === evt.currentTarget) {
-      onClose();
-    }
-  }
+  const handleBackDropClick = useCallback(
+    (evt: React.MouseEvent<HTMLDivElement>) => {
+      if (evt.target === evt.currentTarget) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
   useEffect(() => {
     function handleEscKey(evt: KeyboardEvent) {
       if (evt.key === "Escape") {
